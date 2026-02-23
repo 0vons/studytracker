@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Study Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <div>
+        <h1>Study Tracker</h1>
+        <p>Günlük çalışma saatlerini takip et, haftalık ilerlemeyi gör.</p>
+      </div>
+      <button id="resetBtn" class="button button--ghost">Tüm Verileri Sıfırla</button>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Günlük Kayıt</h2>
+        <form id="entryForm" class="form">
+          <label>
+            Tarih
+            <input type="date" id="entryDate" required />
+          </label>
+          <label>
+            Saat
+            <input type="number" id="entryHours" min="0" max="24" step="0.25" placeholder="2.5" required />
+          </label>
+          <button type="submit" class="button">Kaydet</button>
+        </form>
+        <div class="stat">
+          <span>Bugün</span>
+          <strong id="todayHours">0 saat</strong>
+        </div>
+        <div class="stat">
+          <span>Bu Hafta Toplam</span>
+          <strong id="weekTotal">0 saat</strong>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Haftalık Grafik</h2>
+        <div class="chart" id="chart"></div>
+        <div class="chart__legend" id="chartLegend"></div>
+      </div>
+
+      <div class="card">
+        <h2>Hedef</h2>
+        <form id="goalForm" class="form form--row">
+          <input type="number" id="goalHours" min="1" max="168" step="1" placeholder="Haftalık hedef (saat)" required />
+          <button type="submit" class="button">Hedefi Kaydet</button>
+        </form>
+        <div class="goal">
+          <div class="goal__progress">
+            <div id="goalBar" class="goal__bar"></div>
+          </div>
+          <div class="goal__meta">
+            <span id="goalText">Hedef: 0 saat</span>
+            <span id="goalPercent">%0</span>
+          </div>
+        </div>
+        <div class="hint" id="goalHint">Hedef koymak için saat değerini gir.</div>
+      </div>
+
+      <div class="card">
+        <h2>Notlar</h2>
+        <textarea id="notes" rows="6" placeholder="Bugünkü çalışma notların..."></textarea>
+        <div class="hint">Notlar otomatik kaydedilir.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

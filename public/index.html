@@ -1,0 +1,471 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Study Tracker</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 42'><rect width='42' height='42' rx='13' fill='%234f46e5'/><path d='M13 30V21l8-9 8 9v9' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/><rect x='18' y='23' width='6' height='7' rx='1.5' fill='%23c7d2fe'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<div id="authWrapper" class="auth-wrapper hidden">
+  <div class="auth-bg"></div>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <rect width="42" height="42" rx="13" fill="#4f46e5"/>
+        <path d="M13 30V21l8-9 8 9v9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="18" y="23" width="6" height="7" rx="1.5" fill="#c7d2fe"/>
+        <circle cx="21" cy="13" r="2" fill="#818cf8"/>
+      </svg>
+      <div>
+        <span class="auth-logo__title">Study Tracker</span>
+        <span class="auth-logo__sub">Track. Grow. Excel.</span>
+      </div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Sign In</button>
+      <button class="auth-tab" data-tab="register">Create Account</button>
+    </div>
+
+    <form id="loginForm" class="auth-form">
+      <div class="field">
+        <label>Email Address</label>
+        <div class="input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" name="password" placeholder="" autocomplete="current-password" required />
+          <button type="button" class="pw-toggle" data-target="loginForm">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="loginError" class="auth-error hidden"></div>
+      <button type="submit" class="btn btn--primary btn--full">Sign In</button>
+    </form>
+
+    <form id="registerForm" class="auth-form hidden">
+      <div class="field">
+        <label>Full Name</label>
+        <div class="input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" name="name" placeholder="Jane Smith" autocomplete="name" required />
+        </div>
+      </div>
+      <div class="field">
+        <label>Email Address</label>
+        <div class="input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+      </div>
+      <div class="field">
+        <label>Password <span class="muted">(min. 8 characters)</span></label>
+        <div class="pw-wrap input-icon-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" name="password" placeholder="" autocomplete="new-password" required minlength="8" />
+          <button type="button" class="pw-toggle" data-target="registerForm">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="pwStrength" class="pw-strength">
+        <div class="pw-strength__bar"><div id="pwStrengthFill"></div></div>
+        <span id="pwStrengthLabel"></span>
+      </div>
+      <div id="registerError" class="auth-error hidden"></div>
+      <button type="submit" class="btn btn--primary btn--full">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<div id="appWrapper" class="app-wrapper hidden">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__logo">
+      <svg width="30" height="30" viewBox="0 0 42 42" fill="none">
+        <rect width="42" height="42" rx="13" fill="#4f46e5"/>
+        <path d="M13 30V21l8-9 8 9v9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="18" y="23" width="6" height="7" rx="1.5" fill="#c7d2fe"/>
+      </svg>
+      <span>Study Tracker</span>
+    </div>
+
+    <div class="sidebar__section-label">Menu</div>
+    <nav class="sidebar__nav">
+      <a href="#" class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="#" class="nav-item" data-page="log">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Log Study
+      </a>
+      <a href="#" class="nav-item" data-page="pomodoro">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Pomodoro
+      </a>
+      <a href="#" class="nav-item" data-page="history">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><polyline points="12 7 12 12 15 15"/></svg>
+        History
+      </a>
+      <a href="#" class="nav-item" data-page="goals">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Goals
+      </a>
+      <a href="#" class="nav-item" data-page="insights">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Insights
+      </a>
+    </nav>
+
+    <div class="sidebar__section-label" style="margin-top:auto;padding-top:20px">Account</div>
+    <nav class="sidebar__nav">
+      <a href="#" class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar__user" id="sidebarUser">
+      <div class="avatar" id="sidebarAvatar"></div>
+      <div class="sidebar__user-info">
+        <strong id="sidebarName"></strong>
+        <span id="sidebarEmail"></span>
+      </div>
+      <button class="icon-btn" id="logoutBtn" title="Sign out">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 id="greetingText">Welcome </h1>
+          <p class="subtitle" id="greetingDate"></p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn--ghost" id="quickPomBtn"> Pomodoro</button>
+          <button class="btn btn--primary" id="quickLogBtn">+ Log Study</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="statGrid">
+        <div class="stat-card">
+          <div class="stat-card__icon" style="--c:#4f46e5"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="stat-card__value" id="sc-today"></div><div class="stat-card__label">Today</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="--c:#0891b2"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><div class="stat-card__value" id="sc-week"></div><div class="stat-card__label">This Week</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="--c:#059669"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div><div class="stat-card__value" id="sc-streak"></div><div class="stat-card__label">Streak </div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="--c:#d97706"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+          <div><div class="stat-card__value" id="sc-total"></div><div class="stat-card__label">All Time</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="--c:#9333ea"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="stat-card__value" id="sc-longest"></div><div class="stat-card__label">Best Streak</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__icon" style="--c:#e11d48"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div><div class="stat-card__value" id="sc-month"></div><div class="stat-card__label">This Month</div></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card__header">
+            <h2>Weekly Overview</h2>
+            <div class="card__badge" id="weekGoalBadge"></div>
+          </div>
+          <div class="chart-wrap"><canvas id="weekChart" height="220"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>Weekly Goal</h2><button class="btn--link" id="editGoalBtn">Edit</button></div>
+          <div class="ring-wrap">
+            <canvas id="goalRing" width="180" height="180"></canvas>
+            <div class="ring-center">
+              <strong id="ringPercent">0%</strong>
+              <span id="ringLabel">0 / 0 hrs</span>
+            </div>
+          </div>
+          <div class="goal-hint" id="goalHintDash"></div>
+        </div>
+      </div>
+
+      <div class="three-col mt-20">
+        <div class="card">
+          <div class="card__header"><h2>Top Subjects</h2></div>
+          <div id="subjectList" class="subject-list"></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>Mood Trend</h2></div>
+          <div id="moodChart" class="mood-chart"></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>Recent Activity</h2></div>
+          <div id="recentActivity" class="recent-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-log">
+      <div class="page-header">
+        <div><h1>Log Study Session</h1><p class="subtitle">Add or update a study record for any day.</p></div>
+      </div>
+      <div class="log-layout">
+        <div class="card log-card">
+          <form id="logForm">
+            <div class="form-grid">
+              <div class="field">
+                <label>Date</label>
+                <input type="date" id="logDate" required />
+              </div>
+              <div class="field">
+                <label>Hours Studied</label>
+                <input type="number" id="logHours" min="0" max="24" step="0.25" placeholder="2.5" required />
+              </div>
+              <div class="field full">
+                <label>Subject / Topic</label>
+                <input type="text" id="logSubject" placeholder="e.g. Mathematics, Physics..." maxlength="80" />
+              </div>
+              <div class="field full">
+                <label>Tags <span class="muted">(comma separated)</span></label>
+                <input type="text" id="logTags" placeholder="math, homework, revision" />
+                <div id="tagSuggestions" class="tag-suggestions"></div>
+              </div>
+              <div class="field">
+                <label>Mood</label>
+                <div class="mood-selector" id="moodSelector">
+                  <button type="button" class="mood-btn" data-mood="1" title="Terrible"></button>
+                  <button type="button" class="mood-btn" data-mood="2" title="Bad"></button>
+                  <button type="button" class="mood-btn" data-mood="3" title="Okay"></button>
+                  <button type="button" class="mood-btn" data-mood="4" title="Good"></button>
+                  <button type="button" class="mood-btn" data-mood="5" title="Great"></button>
+                </div>
+              </div>
+              <div class="field full">
+                <label>Notes</label>
+                <textarea id="logNotes" rows="4" placeholder="What did you study today? Any challenges or wins?"></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn--primary" id="logSubmitBtn">Save Log</button>
+              <button type="button" class="btn btn--ghost" id="logClearBtn">Clear</button>
+              <div id="logMessage" class="form-msg hidden"></div>
+            </div>
+          </form>
+        </div>
+        <div class="card log-tips">
+          <h3> Tips</h3>
+          <ul>
+            <li>Use tags to group sessions by topic or project.</li>
+            <li>Log your mood to spot your most productive times.</li>
+            <li>Aim for consistency  short daily sessions beat long binges.</li>
+            <li>Review your weekly goal every Sunday.</li>
+          </ul>
+          <div class="quick-hours">
+            <p style="font-weight:600;margin-bottom:10px">Quick fill</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button class="chip" data-hrs="0.5">30m</button>
+              <button class="chip" data-hrs="1">1h</button>
+              <button class="chip" data-hrs="1.5">1.5h</button>
+              <button class="chip" data-hrs="2">2h</button>
+              <button class="chip" data-hrs="3">3h</button>
+              <button class="chip" data-hrs="4">4h</button>
+              <button class="chip" data-hrs="6">6h</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-pomodoro">
+      <div class="page-header">
+        <div><h1>Pomodoro Timer</h1><p class="subtitle">Focus sessions with structured breaks.</p></div>
+      </div>
+      <div class="pom-layout">
+        <div class="card pom-card">
+          <div class="pom-mode-tabs">
+            <button class="pom-tab active" data-pom="work">Work</button>
+            <button class="pom-tab" data-pom="short">Short Break</button>
+            <button class="pom-tab" data-pom="long">Long Break</button>
+          </div>
+          <div class="pom-timer" id="pomTimer">25:00</div>
+          <div class="pom-label" id="pomLabel">Focus Session</div>
+          <div class="pom-progress"><div id="pomProgressBar"></div></div>
+          <div class="pom-controls">
+            <button class="pom-btn pom-btn--start" id="pomStart">Start</button>
+            <button class="pom-btn pom-btn--reset" id="pomReset">Reset</button>
+          </div>
+          <div class="pom-subject-wrap">
+            <input type="text" id="pomSubject" placeholder="What are you working on?" />
+          </div>
+          <div class="pom-counts" id="pomCounts">
+            <div class="pom-count"><strong id="pomTodayCount">0</strong><span>Today</span></div>
+            <div class="pom-count"><strong id="pomTotalCount">0</strong><span>All Time</span></div>
+            <div class="pom-count"><strong id="pomTotalMins">0</strong><span>Total mins</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>Recent Pomodoros</h2></div>
+          <div id="pomHistory" class="pom-history"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-history">
+      <div class="page-header">
+        <h1>Study History</h1>
+        <div class="header-actions">
+          <input type="month" id="historyMonth" class="input-sm" />
+          <a href="/api/export/csv?token=" id="exportCsvLink" class="btn btn--ghost" style="font-size:.85rem"> CSV</a>
+          <a href="/api/export/json?token=" id="exportJsonLink" class="btn btn--ghost" style="font-size:.85rem"> JSON</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__header"><h2>Activity Heatmap</h2><span class="muted" id="heatmapYear"></span></div>
+        <div id="historyHeatmap" class="heatmap"></div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <div class="hm-cell"></div>
+          <div class="hm-cell" data-level="1"></div>
+          <div class="hm-cell" data-level="2"></div>
+          <div class="hm-cell" data-level="3"></div>
+          <div class="hm-cell" data-level="4"></div>
+          <span>More</span>
+        </div>
+      </div>
+      <div class="card mt-20">
+        <div class="card__header">
+          <h2>Sessions</h2>
+          <div class="filter-wrap">
+            <input type="text" id="historySearch" placeholder="Search subject..." class="input-sm" style="width:160px" />
+          </div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-goals">
+      <div class="page-header">
+        <div><h1>Goals</h1><p class="subtitle">Set milestones and track your progress.</p></div>
+        <button class="btn btn--primary" id="addGoalBtn">+ New Goal</button>
+      </div>
+      <div id="goalsList" class="goals-grid"></div>
+    </section>
+
+    <section class="page" id="page-insights">
+      <div class="page-header">
+        <div><h1>Insights</h1><p class="subtitle">Understand your study patterns.</p></div>
+      </div>
+      <div class="insights-grid">
+        <div class="card">
+          <div class="card__header"><h2>Best Study Day</h2></div>
+          <div id="insightBestDay" class="insight-value"></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>Consistency Score</h2></div>
+          <div id="insightConsistency" class="insight-value"></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>Longest Session</h2></div>
+          <div id="insightLongest" class="insight-value"></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2>vs. Last Month</h2></div>
+          <div id="insightVsLast" class="insight-value"></div>
+        </div>
+      </div>
+      <div class="card mt-20">
+        <div class="card__header"><h2>Average Hours by Weekday</h2></div>
+        <div class="chart-wrap"><canvas id="weekdayChart" height="200"></canvas></div>
+      </div>
+      <div class="card mt-20">
+        <div class="card__header"><h2>12-Week Trend</h2></div>
+        <div class="chart-wrap"><canvas id="trendChart" height="200"></canvas></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-settings">
+      <div class="page-header"><h1>Settings</h1></div>
+      <div class="settings-grid">
+        <div class="card">
+          <h2>Profile</h2>
+          <form id="profileForm" class="form-stack">
+            <div class="field"><label>Full Name</label><input type="text" id="settingName" /></div>
+            <div class="field"><label>Email</label><input type="email" id="settingEmail" disabled /></div>
+            <div class="field"><label>Bio</label><textarea id="settingBio" rows="2" placeholder="A short bio..."></textarea></div>
+            <div class="field"><label>Weekly Goal (hours)</label><input type="number" id="settingGoal" min="0" max="168" step="1" /></div>
+            <button type="submit" class="btn btn--primary">Save Changes</button>
+            <div id="profileMsg" class="form-msg hidden"></div>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Change Password</h2>
+          <form id="passwordForm" class="form-stack">
+            <div class="field"><label>Current Password</label><input type="password" id="settingPwCurrent" placeholder="" /></div>
+            <div class="field"><label>New Password</label><input type="password" id="settingPwNew" placeholder="" /></div>
+            <div class="field"><label>Confirm New Password</label><input type="password" id="settingPwConfirm" placeholder="" /></div>
+            <button type="submit" class="btn btn--primary">Update Password</button>
+            <div id="passwordMsg" class="form-msg hidden"></div>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Pomodoro Settings</h2>
+          <form id="pomSettingsForm" class="form-stack">
+            <div class="field"><label>Work Duration (min)</label><input type="number" id="pomWorkDur" min="1" max="90" value="25" /></div>
+            <div class="field"><label>Short Break (min)</label><input type="number" id="pomShortDur" min="1" max="30" value="5" /></div>
+            <div class="field"><label>Long Break (min)</label><input type="number" id="pomLongDur" min="1" max="60" value="15" /></div>
+            <button type="submit" class="btn btn--primary">Save</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Active Sessions</h2>
+          <div id="sessionsList" class="sessions-list"></div>
+          <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+            <button class="btn btn--danger" id="logoutAllBtn">Sign Out All Devices</button>
+            <a href="/api/export/json" id="exportAllLink" class="btn btn--ghost">Export All Data</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal" id="modalBox">
+    <button class="modal__close" id="modalClose"></button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+
+<script src="js/api.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
