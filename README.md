@@ -1,42 +1,43 @@
 # Study Tracker
 
-Tam donanımlı, güvenli çalışma takip uygulaması.
+A fully featured and secure study tracking application.
 
-## Özellikler
+## Features
 
-| Katman | Detay |
-|--------|-------|
-| **Auth** | JWT (15 dk access + 7 gün refresh), token rotasyonu, oturum yönetimi, bcrypt şifreleme |
-| **Kayıt** | Günlük saat, konu, notlar, ruh hali (1-5) |
-| **Dashboard** | Haftalık bar grafik, donut ring hedef, seri sayacı, konu dağılımı |
-| **Geçmiş** | Aylık ısı haritası + liste görünümü |
-| **Hedefler** | Renk etiketli hedef kartları, ilerleme çubukları |
-| **Ayarlar** | Profil, şifre değiştirme, aktif oturumlar, tüm cihazlardan çıkış |
-| **DB** | SQLite (WAL, FK) — sıfır kurulum |
-| **Responsive** | Mobil uyumlu sidebar + hamburger menü |
+| Layer | Details |
+|-------|----------|
+| **Authentication** | JWT (15 min access + 7 day refresh), token rotation, session management, bcrypt password hashing |
+| **Logging** | Daily study hours, subject, notes, mood (1–5) |
+| **Dashboard** | Weekly bar chart, goal donut ring, streak counter, subject distribution |
+| **History** | Monthly heatmap + list view |
+| **Goals** | Color-tagged goal cards, progress bars |
+| **Settings** | Profile management, password change, active sessions, logout from all devices |
+| **Database** | SQLite (WAL, FK enabled) — zero configuration |
+| **Responsive** | Mobile-friendly sidebar + hamburger menu |
 
-## Kurulum & Çalıştırma
+## Installation & Running
 
 ```powershell
 npm install
 npm start
 ```
 
-Ardından tarayıcıdan: `http://localhost:3000`
+Then open in your browser:  
+`http://localhost:3000`
 
-### Geliştirme (auto-reload)
+### Development Mode (auto-reload)
 
 ```powershell
 npm run dev
 ```
 
-## Proje Yapısı
+## Project Structure
 
 ```
-├── server.js          ← Express giriş noktası
+├── server.js          ← Express entry point
 ├── server/
-│   ├── db.js          ← SQLite schema & bağlantı
-│   ├── auth.js        ← JWT yardımcıları
+│   ├── db.js          ← SQLite schema & connection
+│   ├── auth.js        ← JWT utilities
 │   ├── middleware.js  ← authenticate / optionalAuth
 │   ├── authRoutes.js  ← /auth/...
 │   └── apiRoutes.js   ← /api/...
@@ -44,8 +45,8 @@ npm run dev
 │   ├── index.html
 │   ├── css/app.css
 │   └── js/
-│       ├── api.js     ← Fetch + token yenileme
-│       ├── charts.js  ← Canvas çizimler
-│       └── app.js     ← Uygulama mantığı
+│       ├── api.js     ← Fetch + token refresh logic
+│       ├── charts.js  ← Canvas rendering
+│       └── app.js     ← Application logic
 └── .env               ← JWT_SECRET & PORT
 ```
